@@ -2,13 +2,15 @@ import numpy as np
 
 from board import Board
 
+import json
+
 
 class Agent:
 
   def __init__(self):
-    self.df = 0.5
+    self.df = 0.13
     self.lr = 0.35
-    self.noise = 0.5
+    self.noise = 0.2
 
     self.Q = {}
 
@@ -32,7 +34,7 @@ class Agent:
       action = states[i - 1][1]
       future_act = states[i][1]
 
-      self._learn(state, future, action, future_act, reward)
+      self._learn(state, future, action, future_act, i/reward)
 
   def _learn(self, state: str, future_state: str, action: float,
              future_action: float, reward: float) -> None:
@@ -69,8 +71,15 @@ def train(agent: Agent, epochs: int):
       agent.learn(states1, -1)
       agent.learn(states2, 7)
     else:
-      agent.learn(states1, 1)
-      agent.learn(states2, 1)
+      agent.learn(states1, 0.5)
+      agent.learn(states2, 0.5)
 
     epoch += 1
     board.reset()
+
+  with open('Q.json', 'w') as file:
+    newQ = {}
+    for state in agent.Q.keys():
+      newQ[state] = list(agent.Q[state])
+      
+    file.write(json.dumps(newQ, indent='\t'))

@@ -2,10 +2,13 @@ import qlearn
 
 from board import Board
 
+import json
+
 
 def main():
   agent = qlearn.Agent()
-  qlearn.train(agent, 10_000)
+  qlearn.train(agent, 10000)
+  agent.Q = json.load(open('Q.json', 'r'))
   agent.noise = 0
 
   for key in agent.Q.keys():
