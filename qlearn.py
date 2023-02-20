@@ -10,7 +10,7 @@ class Agent:
   def __init__(self):
     self.df = 0.13
     self.lr = 0.35
-    self.noise = 0.2
+    self.noise = 0.4
 
     self.Q = {}
 

@@ -4,11 +4,13 @@ from board import Board
 
 import json
 
+from colorama import Back, Fore
+
 
 def main():
   agent = qlearn.Agent()
-  qlearn.train(agent, 10000)
   agent.Q = json.load(open('Q.json', 'r'))
+  qlearn.train(agent, 10_000)
   agent.noise = 0
 
   for key in agent.Q.keys():
@@ -21,7 +23,15 @@ def main():
     state = board.encode(board.player)
 
     print('codificado:', state)
-    print('probabilidades:', agent.act(state))
+    print('probabilidades: ', end='')
+    ideal, props = agent.act(state)
+    for i in range(len(props)):
+      if i == ideal:
+        print(f'{Back.GREEN + Fore.WHITE}{i}:{props[i]:0.2f}{Back.RESET}', end=' ')
+        continue
+      print(f'{Back.YELLOW + Fore.WHITE}{i}:{props[i]:0.2f}{Back.RESET}', end=' ')
+
+    print()
 
     pos = int(
       input(
